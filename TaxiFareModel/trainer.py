@@ -52,15 +52,17 @@ class Trainer():
             ('linear_model', LinearRegression()
                                 )])
 
-    def run(self):
+        return self.pipeline
+
+    def run(self, X, y):
         """set and train the pipeline"""
-        self.pipeline.fit(self.X, self.y)
+        return self.pipeline.fit(self.X, self.y)
 
     def evaluate(self, X_test, y_test):
         """evaluates the pipeline on df_test and return the RMSE"""
         # compute rmse between y_pred and y_true/test:
         y_pred = self.pipeline.predict(X_test)
-        rmse = compute_rmse(y_pred, y_test)
+        return compute_rmse(y_pred, y_test)
 
 if __name__ == "__main__":
     # clean data
@@ -73,17 +75,17 @@ if __name__ == "__main__":
 
     # hold out
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.15)
+    # print(X_train.shape)
 
     # train
     trainer = Trainer(X_train,y_train)
 
     # build pipeline
-    pipeline = trainer.set_pipeline()
-    print(pipeline)
+    trainer.set_pipeline()
 
     # train the pipeline
-    trainer.run()
+    trainer.run(X_train, y_train)
 
     # evaluate the pipeline
-    rmse = trainer.evaluate(X_val, y_val, pipeline)
+    rmse = trainer.evaluate(X_val, y_val)
     print(rmse)
